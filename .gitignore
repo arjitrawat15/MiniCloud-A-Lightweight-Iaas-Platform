@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.db
+.env
+.venv/
+storage_service/storage/*
+orchestrator/vm_images/*
+node_modules/
+dist/
+build/
+__pycache__/
+
