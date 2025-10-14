@@ -57,6 +57,8 @@ def download_file(filename: str):
     file_path = os.path.join(STORAGE_DIR, filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
+    
+    log_action("download", filename)   # ✅ move before return
     return FileResponse(file_path, filename=filename)
 
 
@@ -68,5 +70,7 @@ def delete_file(filename: str):
     file_path = os.path.join(STORAGE_DIR, filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
+    
     os.remove(file_path)
+    log_action("delete", filename)     # ✅ move before return
     return {"message": f"🗑️ File '{filename}' deleted successfully"}
