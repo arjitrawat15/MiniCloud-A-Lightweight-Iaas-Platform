@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
 import os
+from storage_service.utils import log_action, safe_filename, get_file_size, human_readable_size
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -58,7 +59,7 @@ def download_file(filename: str):
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
     
-    log_action("download", filename)   # ✅ move before return
+    log_action("download", filename)   
     return FileResponse(file_path, filename=filename)
 
 
@@ -72,5 +73,5 @@ def delete_file(filename: str):
         raise HTTPException(status_code=404, detail="File not found")
     
     os.remove(file_path)
-    log_action("delete", filename)     # ✅ move before return
+    log_action("delete", filename)    
     return {"message": f"🗑️ File '{filename}' deleted successfully"}
