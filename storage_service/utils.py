@@ -4,18 +4,24 @@ from pathlib import Path
 import re
 
 # -----------------------
-# Configure logging
+# Configure logging (console + file)
 # -----------------------
+LOG_FILE = Path(__file__).resolve().parent / "storage.log"
+
 logging.basicConfig(
     level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    handlers=[
+        logging.FileHandler(LOG_FILE, mode="a"),  # write logs to file
+        logging.StreamHandler()                   # also print logs in console
+    ]
 )
 
-def log_action(action: str, filename: str):
-    """
-    Logs actions performed on files (upload/download/delete)
-    """
-    logging.info(f"{action.upper()} - {filename}")
+def log_action(action: str, details: dict = None):
+    message = f"[ACTION] {action}"
+    if details:
+        message += f" | Details: {details}"
+    logging.info(message)
 
 
 # -----------------------
@@ -40,6 +46,7 @@ def get_file_size(file_path: str) -> int:
     if os.path.exists(file_path):
         return os.path.getsize(file_path)
     return 0
+
 
 def human_readable_size(size_bytes: int) -> str:
     """
